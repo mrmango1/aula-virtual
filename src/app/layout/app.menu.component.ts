@@ -18,8 +18,6 @@ export class AppMenuComponent implements OnInit {
                 label: 'Cursos',
                 items: [
                     { label: 'Materias', icon: 'pi pi-fw pi-book', routerLink: ['/management/subject'] },
-                    { label: 'Estudiantes', icon: 'pi pi-fw pi-users', routerLink: ['/management/student'] },
-                    { label: 'Notas', icon: 'pi pi-fw pi-pencil', routerLink: ['/management/professor'] }
                 ]
             },
         ];
