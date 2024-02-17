@@ -1,0 +1,62 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card px-6 py-6">
+            <p-toast></p-toast>
+            <p-table #dt [value]="products" [columns]="cols" responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['curso.nombreCurso','nota']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowHover]="true" dataKey="id">
+                <ng-template pTemplate="caption">
+                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                        <h5 class="m-0">Notas</h5>
+                        <span class="block mt-2 md:mt-0 p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Buscar..."  class="w-full sm:w-auto"/>
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pSortableColumn="curso">Curso <p-sortIcon field="curso"></p-sortIcon></th>
+                        <th pSortableColumn="student">Estudiante <p-sortIcon field="student"></p-sortIcon></th>
+                        <th pSortableColumn="grade">Calificacion <p-sortIcon field="grade"></p-sortIcon></th>
+                        <th></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-product>
+                    <tr>
+                        <td style="width:35%; min-width:10rem;"><span class="p-column-title">Code</span>
+                            {{product.curso.nombreCurso || product.id}}
+                        </td>
+                        <td style="width:35%; min-width:10rem;">
+                            <span class="p-column-title">Name</span>
+                            {{product.estudiante.nombres}} {{product.estudiante.apellidos}}
+                        </td>
+                        <td style="width:25%; min-width:10rem;">
+                            <span class="p-column-title">Name</span>
+                            {{product.nota ?? ''}}
+                        </td>
+                        <td>
+                            <div class="flex">
+                                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editProduct(product)"></button>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+
+        <p-dialog [(visible)]="productDialog" [style]="{width: '250px'}" header="Calificación" [modal]="true" class="p-fluid">
+            <ng-template pTemplate="content">
+                <div class="field">
+                    <label for="name">Nota</label>
+                    <input type="number" pInputText id="name" [(ngModel)]="product.nota" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !product.nota}"/>
+                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !product.nota">Nota es requerida.</small>
+                </div>
+            </ng-template>
+
+            <ng-template pTemplate="footer">
+                <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+                <button pButton pRipple label="Guardar" icon="pi pi-check" class="p-button-text" (click)="saveProduct()"></button>
+            </ng-template>
+        </p-dialog>
+
+    </div>
+</div>
