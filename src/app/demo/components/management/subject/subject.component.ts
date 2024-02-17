@@ -1,15 +1,17 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { SelectItem } from 'primeng/api';
 import { DataView } from 'primeng/dataview';
-import { Product } from 'src/app/demo/api/product';
+import { Curso } from 'src/app/demo/api/manage';
 import { ProductService } from 'src/app/demo/service/product.service';
+import { DataSharingService } from 'src/app/demo/service/shareData.service';
+import { SubjectService } from 'src/app/demo/service/subject.service';
 
 @Component({
-    templateUrl: './subject.component.html'
+    templateUrl: './subject.component.html',
 })
 export class SubjectComponent implements OnInit {
-
-    products: Product[] = [];
+    subjects: Curso[] = [];
 
     sortOptions: SelectItem[] = [];
 
@@ -17,40 +19,17 @@ export class SubjectComponent implements OnInit {
 
     sortField: string = '';
 
-    sourceCities: any[] = [];
-
-    targetCities: any[] = [];
-
-    orderCities: any[] = [];
-
-    constructor(private productService: ProductService) { }
+    constructor(
+        private subjectService: SubjectService,
+        private shareService: DataSharingService,
+        private router: Router
+    ) {}
 
     ngOnInit() {
-        this.productService.getProducts().then(data => this.products = data);
-
-        this.sourceCities = [
-            { name: 'San Francisco', code: 'SF' },
-            { name: 'London', code: 'LDN' },
-            { name: 'Paris', code: 'PRS' },
-            { name: 'Istanbul', code: 'IST' },
-            { name: 'Berlin', code: 'BRL' },
-            { name: 'Barcelona', code: 'BRC' },
-            { name: 'Rome', code: 'RM' }];
-
-        this.targetCities = [];
-
-        this.orderCities = [
-            { name: 'San Francisco', code: 'SF' },
-            { name: 'London', code: 'LDN' },
-            { name: 'Paris', code: 'PRS' },
-            { name: 'Istanbul', code: 'IST' },
-            { name: 'Berlin', code: 'BRL' },
-            { name: 'Barcelona', code: 'BRC' },
-            { name: 'Rome', code: 'RM' }];
-
+        this.subjectService.getSubject().then((data) => (this.subjects = data));
         this.sortOptions = [
-            { label: 'Orden Ascendente', value: '!price' },
-            { label: 'Orden Descendente', value: 'price' }
+            { label: 'Orden Ascendente', value: '!nombreCurso' },
+            { label: 'Orden Descendente', value: 'nombreCurso' },
         ];
     }
 
@@ -70,4 +49,8 @@ export class SubjectComponent implements OnInit {
         dv.filter((event.target as HTMLInputElement).value);
     }
 
+    onNext(curso: Curso) {
+        this.shareService.setCurrentCurso(curso);
+        this.router.navigate(['/management/student']);
+    }
 }
